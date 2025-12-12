@@ -1,20 +1,18 @@
-from src.power import power_function
-from src.constants import SAMPLE_CONSTANT
+import typer
+from src.services.casino import run_simulation
 
+app = typer.Typer()
 
-def main() -> None:
-    """
-    Обязательнная составляющая программ, которые сдаются. Является точкой входа в приложение
-    :return: Данная функция ничего не возвращает
-    """
+@app.command()
+def run(
+    steps: int = typer.Option(20, "--steps", "-s", help="Количество шагов симуляции"),
+    seed: int = typer.Option(None, "--seed", help="Сид псевдослучайности")
+):
+    run_simulation(steps, seed)
 
-    target, degree = map(int, input("Введите два числа разделенные пробелом: ").split(" "))
-
-    result = power_function(target=target, power=degree)
-
-    print(result)
-
-    print(SAMPLE_CONSTANT)
+@app.command()
+def demo():
+    run_simulation(steps=5, seed=141)
 
 if __name__ == "__main__":
-    main()
+    app()
