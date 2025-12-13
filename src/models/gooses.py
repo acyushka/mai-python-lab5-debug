@@ -8,7 +8,6 @@ class Goose:
     def __init__(self, name: str, honk_volume: int):
         self.name = name
         self.honk_volume = honk_volume
-        self.income = 0
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__} {self.name} с криком {self.honk_volume}"
@@ -23,14 +22,18 @@ class WarGoose(Goose):
             return f"Боевой гусь {self.name} захотел помахать дубинкой, но жертву найти не удалось"
 
         victim: Player = choice(alive_players)
-        damage = randint(10,40)
+        damage = randint(10,25)
+
+        previous_hp = victim.hp
         victim.hp -= damage
+        print(f"  HP игрока {victim.name}: {previous_hp} -> {victim.hp}")
 
         msg = f"Боевой гусь {self.name} внезапно долбанул по голове игрока {victim.name} и нанес урон в {damage} HP!"
         if not victim.is_alive():
             msg += " Игрок не выжил.."
-            self.income += casino.balances[victim.name]
-            casino.balances[victim.name] = 0
+            casino.gooses_income[self.name] += casino.balances[victim.name]
+            del casino.balances[victim.name]
+            casino.players.remove(victim)
 
         return msg
 
@@ -41,14 +44,24 @@ class HonkGoose(Goose):
             return f""
 
         stunned_players = 0
+        killed_players = 0
         for player in casino.players:
             if player.balance >= self.honk_volume:
                 casino.balances[player.name] -= self.honk_volume
+                casino.gooses_income[self.name] += self.honk_volume
+
+                stunned_players += 1
             else:
-                casino.balances[player.name] = 0
+                casino.gooses_income[self.name] += self.honk_volume
 
-            self.income += self.honk_volume
-            stunned_players += 1
+                killed_players += 1
+                del casino.balances[player.name]
+                casino.players.remove(player)
 
-        return f"{self.name} издал крик громкостью {self.honk_volume}. Пострадало {stunned_players} игроков!"
+        msg = f"Гусь {self.name} издал крик громкостью {self.honk_volume}. Пострадало {stunned_players} игроков!"
+        if killed_players > 1:
+            msg += f" {killed_players} игроков потеряли сознание! Группа гусей увела их куда-то.."
+        elif killed_players == 1:
+            msg += f" {killed_players} игрок потерял сознание! Группа гусей увела его куда-то.."
 
+        return msg

@@ -1,12 +1,12 @@
-import typer
+from typer import Typer, Option
 from src.services.casino import run_simulation
 
-app = typer.Typer()
+app = Typer()
 
 @app.command()
 def run(
-    steps: int = typer.Option(20, "--steps", "-s", help="Количество шагов симуляции"),
-    seed: int = typer.Option(None, "--seed", help="Сид псевдослучайности")
+    steps: int = Option(20, "--steps", "-s", help="Количество шагов симуляции"),
+    seed: int = Option(None, "--seed", help="Сид псевдослучайности")
 ):
     run_simulation(steps, seed)
 

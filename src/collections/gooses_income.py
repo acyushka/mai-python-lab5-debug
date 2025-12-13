@@ -14,4 +14,4 @@ class GoosesIncomeCollection(UserDict):
 
         balance_changes = new_value - previous_value
         if balance_changes != 0:
-            print(f"[INFO] Гусь {key} заработал: {previous_value} -> {new_value}")
+            print(f"  Гусь {key} заработал: {previous_value} -> {new_value}")

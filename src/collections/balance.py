@@ -13,7 +13,8 @@ class CasinoBalance(UserDict):
         super().__setitem__(key, new_value)
 
         balance_changes = new_value - previous_value
-        if balance_changes != 0:
-            print(f"[INFO] Баланс игрока {key}: {previous_value} -> {new_value}")
-        else:
-            print(f"[INFO] Баланс игрока {key} не изменился")
+        if previous_value != 0: # чтобы при регистрации не писало лог
+            if balance_changes != 0:
+                print(f"  Баланс игрока {key}: {previous_value} -> {new_value}")
+            else:
+                print(f"  Баланс игрока {key} не изменился")
