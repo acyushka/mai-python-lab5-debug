@@ -6,6 +6,8 @@ from src.models.gooses import Goose
 
 
 class GooseCollection:
+    """Списковая коллекция гусей через композицию"""
+
     def __init__(self):
         self.gooses: list[Goose] = []
 

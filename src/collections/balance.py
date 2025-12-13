@@ -2,6 +2,8 @@ from collections import UserDict
 
 
 class CasinoBalance(UserDict):
+    """Словарная коллекция балансов игроков в казино, наследуется от UserDict, производится логирование при изменении значения элемента"""
+
     def __setitem__(self, key: str, new_value: int) -> None:
         if not isinstance(key, str):
             raise TypeError("Имя игрока должно быть строкой!")

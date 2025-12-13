@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Chip:
+    """Простая сущность фишки"""
     value: int
 
     def __add__(self, other):

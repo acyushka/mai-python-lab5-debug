@@ -2,6 +2,8 @@ from collections import UserDict
 
 
 class GoosesIncomeCollection(UserDict):
+    """Словарная коллекция доходов гусей, наследуется от UserDict, производится логирование при изменении значения элемента"""
+
     def __setitem__(self, key: str, new_value: int) -> None:
         if not isinstance(key, str):
             raise TypeError("Имя гуся должно быть строкой!")

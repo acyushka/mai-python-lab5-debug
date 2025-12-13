@@ -5,6 +5,8 @@ from typing import Any
 
 
 class Goose:
+    """Обычный гусь"""
+
     def __init__(self, name: str, honk_volume: int):
         self.name = name
         self.honk_volume = honk_volume
@@ -16,6 +18,7 @@ class Goose:
         return "Простой гусь, ничего не умеет"
 
 class WarGoose(Goose):
+    """Боевой гусь с дубиной, может бить случайного игрока, если тот умрет, он заберет все его фишки"""
     def action(self, casino: Any) -> str:
         alive_players = [player for player in casino.players if player.is_alive()]
         if not alive_players:
@@ -40,6 +43,7 @@ class WarGoose(Goose):
 
 
 class HonkGoose(Goose):
+    """Гусь крикун, своим криком оглушает всех, и пока все приходят в себя, он крадет у всех немного фишек, а если вдруг фишек не остается игрок от шока теряет сознание"""
     def action(self, casino: Any) -> str:
         if not casino.players:
             return f""

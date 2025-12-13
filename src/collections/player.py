@@ -6,6 +6,7 @@ from src.models.player import Player
 
 
 class PlayerCollection:
+    """Списковая коллекция игроков через композицию"""
 
     def __init__(self):
         self.players: list[Player] = []

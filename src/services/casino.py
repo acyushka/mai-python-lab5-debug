@@ -13,7 +13,7 @@ NAMES = [
         "Алекс", "Боб", "Виктория", "Джон", "Майк", "Сара", "Елена", "Дмитрий",
         "Ольга", "Макс", "Ник", "Кейт", "Лео", "Анна", "Сергей", "Ирина", "Даша",
         "Игорь", "Эвелина", "Артем", "Леди Гага", "Дарт Вейдер", "Сабина", "Герасим",
-    ]
+    ] # стек из имен, пока он не пуст, игроки и гуси могут регистрироваться
 
 class Casino:
     """Главная бизнес-логика всего сервиса"""
@@ -46,6 +46,7 @@ class Casino:
             return f"Игрок {name} сел за стол (HP: 100, Баланс: ${self.balances[name]})"
 
     def register_goose(self, goose_type: str = "0", name: str = "---1", honk_volume: int = -1) -> str | None:
+        """Регистрация гусей"""
         if self.names:
             self.steps_count += 1
 
@@ -73,11 +74,14 @@ class Casino:
             return msg
 
     def player_dep(self) -> str | None:
+        """
+        Ставка случайного игрока: проверка, что такой есть, формирование случайной суммы фишек, шанс 90%, что ставка не залетит.
+        """
         player = self.players.get_random_alive_player()
         if not isinstance(player, Player):
             pass
         else:
-            self.steps_count += 1
+            self.steps_count += 1 # в каждом методе счетчик увеличивается только тогда, когда наступает момент точного выполнения события
 
             dep: Chip = Chip(random.randint(5, player.balance))
             self.balances[player.name] -= dep.value
@@ -101,6 +105,7 @@ class Casino:
                 return f"Игрок {player.name} поставил ${dep.value} и ставка не залетела.."
 
     def goose_action(self) -> str | None:
+        """Регистрация игроков"""
         if self.gooses and self.players:
             self.steps_count += 1
 
@@ -110,6 +115,7 @@ class Casino:
             pass
 
     def goose_group(self) -> str | None:
+        """Формирование группы гусей для мощного удара по всем, сложение 2-х коллекций для практического использования __add__ у класса коллекции"""
         if len(self.gooses) > 1 and self.players:
             self.steps_count += 1
 
@@ -143,6 +149,7 @@ class Casino:
             return msg
 
     def panic_action(self) -> str | None:
+        """Паника у случайного игрока при виде гуся. Он безвозвратно убегает и оставляет фишки на столе"""
         player = self.players.get_random_alive_player()
         goose = self.gooses.get_random_goose()
         if not isinstance(player, Player) or not isinstance(goose, Goose):
@@ -164,6 +171,7 @@ class Casino:
             return msg
 
     def healing_action(self) -> str | None:
+        """Случайный игрок может найти энергетик под столом и увеличить свое здоровье немного"""
         player = self.players.get_random_alive_player()
         if not isinstance(player, Player):
             pass
@@ -171,11 +179,14 @@ class Casino:
             self.steps_count += 1
 
             heal = randint(10, 30)
+            previous_hp = player.hp
             player.hp += heal
+            print(f"  HP игрока {player.name}: {previous_hp} -> {player.hp}")
 
             return f"Игрок {player.name} нашел недопитый энергетик под столом и выпил его. HP игрока увеличилось на {heal}"
 
     def step(self) -> None:
+        """Метод шага, выбирается случайное событие, некоторые я несколько раз продублировал для баланса, чтобы чаще выполнялись обычные вещи"""
         actions = [
             self.register_player,
             self.register_goose,
@@ -202,6 +213,7 @@ class Casino:
 
 
 def run_simulation(steps: int = 20, seed: int | None = None) -> None:
+    """Симуляция: если не задан сид, то он случайный. В начале симуляции уже зареганы немного сущностей. Потом в цикле выполняются шаги, пока счетчик не остановит."""
     if seed is not None:
         random.seed(seed)
 
