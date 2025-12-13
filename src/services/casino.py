@@ -35,6 +35,7 @@ class Casino:
             player = Player(name, balance)
             self.players.append(player)
             self.balances[name] = balance
+            print("  + Игрок")
 
             return f"Игрок {name} сел за стол (HP: 100, Баланс: ${self.balances[name]})"
 
@@ -59,6 +60,7 @@ class Casino:
 
             self.gooses.append(goose)
             self.gooses_income[name] = 0
+            print("  + Гусь")
 
             return msg
 
@@ -122,7 +124,7 @@ class Casino:
                     self.players.remove(victim)
 
             if amount > 0:
-                random_goose = choice(self.gooses)
+                random_goose = self.gooses.get_random_goose()
                 self.gooses_income[random_goose.name] += amount
 
                 msg += f" Не выжило: {killed_players} игрок(-ов). Гусь {random_goose.name} забрал с трупов {amount}.."
