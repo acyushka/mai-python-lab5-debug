@@ -1,13 +1,13 @@
 import random
 from random import randint, choice
 
-from src.collections.balance import CasinoBalance
-from src.collections.goose import GooseCollection
-from src.collections.gooses_income import GoosesIncomeCollection
-from src.collections.player import PlayerCollection
-from src.models.chips import Chip
-from src.models.gooses import Goose, WarGoose, HonkGoose
-from src.models.player import Player
+from src_buggy.collections.balance import CasinoBalance
+from src_buggy.collections.goose import GooseCollection
+from src_buggy.collections.gooses_income import GoosesIncomeCollection
+from src_buggy.collections.player import PlayerCollection
+from src_buggy.models.chips import Chip
+from src_buggy.models.gooses import Goose, WarGoose, HonkGoose
+from src_buggy.models.player import Player
 
 NAMES = [
         "Алекс", "Боб", "Виктория", "Джон", "Майк", "Сара", "Елена", "Дмитрий",
@@ -35,7 +35,9 @@ class Casino:
 
             if name == "---1":
                 name = self.names.pop()
-            if balance == -1:
+
+            ### ОШИБКА 3 - is вместо ==
+            if balance is -1:
                 balance = randint(30, 777)
 
             player = Player(name, balance)
@@ -159,7 +161,9 @@ class Casino:
 
             msg = f"Игрок {player.name} запаниковал при виде агрессивно настроенного гуся {goose.name} и убежал в страхе из казино.."
             amount = self.balances[player.name]
-            if amount > 0:
+
+            ### ОШИБКА 2 - неверное логическое условие
+            if amount < 0:
                 self.gooses_income[goose.name] += amount
 
                 print("  - Игрок")
@@ -206,10 +210,16 @@ class Casino:
 
         random_action = choice(actions)
         print("[ИЗМЕНЕНИЯ ПОСЛЕ СОБЫТИЯ]")
-        result = random_action()
-        print("[ИЗМЕНЕНИЯ ПОСЛЕ СОБЫТИЯ]")
-        print()
-        print(f"[СОБЫТИЕ] {result} [СОБЫТИЕ]")
+
+        try:
+            result = random_action()
+            print("[ИЗМЕНЕНИЯ ПОСЛЕ СОБЫТИЯ]")
+            print()
+            print(f"[СОБЫТИЕ] {result} [СОБЫТИЕ]")
+
+        ### ОШИБКА 4 - перехват слишĸом общего исĸлючения
+        except Exception as e:
+            print(f"[ОШИБКА]: {e}")
 
 
 def run_simulation(steps: int = 20, seed: int | None = None) -> None:
@@ -229,7 +239,8 @@ def run_simulation(steps: int = 20, seed: int | None = None) -> None:
 
     casino.steps_count -= 6 # вернуть счетчик шагов после инициализации к 0
 
-    while casino.steps_count < steps:
+    ### ОШИБКА 1 - Off-by-one
+    while casino.steps_count <= steps:
         print()
         print(f"══════════════════════════════ [ШАГ {casino.steps_count + 1}] ════════════════════════════════════")
         casino.step()

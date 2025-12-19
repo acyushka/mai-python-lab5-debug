@@ -27,6 +27,7 @@ class WarGoose(Goose):
         victim: Player = choice(alive_players)
         damage = randint(10,25)
 
+        ### ИСПРАВЛЕНИЕ 5 - обращение к существующему атрибуту
         previous_hp = victim.hp
         victim.hp -= damage
         print(f"  HP игрока {victim.name}: {previous_hp} -> {victim.hp}")
