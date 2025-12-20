@@ -1,8 +1,8 @@
 import pytest
-from src.collections.player import PlayerCollection
-from src.models.player import Player
-from src.collections.goose import GooseCollection
-from src.models.gooses import Goose, WarGoose
+from src_buggy.collections.player import PlayerCollection
+from src_buggy.models.player import Player
+from src_buggy.collections.goose import GooseCollection
+from src_buggy.models.gooses import Goose, WarGoose
 
 
 class TestPlayerCollection:

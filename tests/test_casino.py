@@ -1,5 +1,5 @@
 import random
-from src.services.casino import Casino
+from src_buggy.services.casino import Casino
 
 
 class TestCasino:
